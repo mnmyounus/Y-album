@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto-Updating Image Slider</title>
+    <style>
+        /* Basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .slider {
+            width: 80%;
+            max-width: 600px;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .slides {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .slides img {
+            width: 100%;
+        }
+        .navigation {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .nav-btn {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .nav-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="slider">
+        <div class="slides" id="slides"></div>
+    </div>
+    <div class="navigation">
+        <button class="nav-btn" id="prev">Previous</button>
+        <button class="nav-btn" id="next">Next</button>
+    </div>
+
+    <script>
+        const slidesContainer = document.getElementById('slides');
+        const prevBtn = document.getElementById('prev');
+        const nextBtn = document.getElementById('next');
+        let currentIndex = 0;
+
+        // Array of image file names
+        const images = [
+            'img1.jpg',
+            'img2.jpg',
+            'img3.jpg',
+            'img4.jpg'
+        ];
+
+        // Dynamically add images to the slider
+        images.forEach(image => {
+            const img = document.createElement('img');
+            img.src = image; // Ensure the images are in the same directory as this file
+            img.alt = `Slide ${image}`;
+            slidesContainer.appendChild(img);
+        });
+
+        const updateSlidePosition = () => {
+            const slideWidth = slidesContainer.querySelector('img')?.clientWidth || 0;
+            slidesContainer.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+        };
+
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % images.length;
+            updateSlidePosition();
+        });
+
+        prevBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            updateSlidePosition();
+        });
+
+        window.addEventListener('resize', updateSlidePosition);
+
+        // Initial setup
+        updateSlidePosition();
+    </script>
+</body>
+</html>
