@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auto-Updating Image Slider</title>
+    <title>Full-Screen Image Slider</title>
     <style>
         /* Basic styling */
         body {
@@ -30,6 +30,7 @@
         }
         .slides img {
             width: 100%;
+            cursor: pointer;  /* Make images clickable */
         }
         .navigation {
             display: flex;
@@ -49,6 +50,33 @@
         .nav-btn:hover {
             background-color: #0056b3;
         }
+
+        /* Modal styling */
+        #modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+        #modal img {
+            max-width: 90%;
+            max-height: 90%;
+        }
+        #modalClose {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #fff;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 20px;
+        }
     </style>
 </head>
 <body>
@@ -60,13 +88,22 @@
         <button class="nav-btn" id="next">Next</button>
     </div>
 
+    <!-- Modal for viewing full-size image -->
+    <div id="modal">
+        <button id="modalClose">&times;</button>
+        <img id="modalImage" src="" alt="Full-size image">
+    </div>
+
     <script>
         const slidesContainer = document.getElementById('slides');
         const prevBtn = document.getElementById('prev');
         const nextBtn = document.getElementById('next');
+        const modal = document.getElementById('modal');
+        const modalImage = document.getElementById('modalImage');
+        const modalClose = document.getElementById('modalClose');
         let currentIndex = 0;
 
-        // Array of image file names
+        // Array of image file names (you can easily add more images here)
         const images = [
             'img1.jpg',
             'img2.jpg',
@@ -77,8 +114,11 @@
         // Dynamically add images to the slider
         images.forEach(image => {
             const img = document.createElement('img');
-            img.src = image; // Ensure the images are in the same directory as this file
+            img.src = image;
             img.alt = `Slide ${image}`;
+            img.addEventListener('click', () => {
+                showModal(image); // Show image in full-size when clicked
+            });
             slidesContainer.appendChild(img);
         });
 
@@ -99,7 +139,18 @@
 
         window.addEventListener('resize', updateSlidePosition);
 
-        // Initial setup
+        // Show the image in full screen in the modal
+        function showModal(imageSrc) {
+            modal.style.display = 'flex';
+            modalImage.src = imageSrc;
+        }
+
+        // Close the modal when the close button is clicked
+        modalClose.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        // Initial setup for the slider
         updateSlidePosition();
     </script>
 </body>
